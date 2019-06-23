@@ -1,0 +1,14 @@
+C:\Users\melinda\source\repos\MobileServer\MobileServer\bin\Debug\MobileServer.exe.config
+C:\Users\melinda\source\repos\MobileServer\MobileServer\bin\Debug\MobileServer.exe
+C:\Users\melinda\source\repos\MobileServer\MobileServer\bin\Debug\MobileServer.pdb
+C:\Users\melinda\source\repos\MobileServer\MobileServer\obj\Debug\MobileServer.csprojAssemblyReference.cache
+C:\Users\melinda\source\repos\MobileServer\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
+C:\Users\melinda\source\repos\MobileServer\MobileServer\obj\Debug\MobileServer.exe
+C:\Users\melinda\source\repos\MobileServer\MobileServer\obj\Debug\MobileServer.pdb
+D:\programming\workspace\xamarin\MobileServer\MobileServer\bin\Debug\MobileServer.exe.config
+D:\programming\workspace\xamarin\MobileServer\MobileServer\bin\Debug\MobileServer.exe
+D:\programming\workspace\xamarin\MobileServer\MobileServer\bin\Debug\MobileServer.pdb
+D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.csprojAssemblyReference.cache
+D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
+D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.exe
+D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.pdb
