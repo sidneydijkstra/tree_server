@@ -12,3 +12,10 @@ D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServe
 D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
 D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.exe
 D:\programming\workspace\xamarin\MobileServer\MobileServer\obj\Debug\MobileServer.pdb
+D:\programming\workspace\C#\tree_server\MobileServer\bin\Debug\MobileServer.exe.config
+D:\programming\workspace\C#\tree_server\MobileServer\bin\Debug\MobileServer.exe
+D:\programming\workspace\C#\tree_server\MobileServer\bin\Debug\MobileServer.pdb
+D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.csprojAssemblyReference.cache
+D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
+D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.exe
+D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.pdb

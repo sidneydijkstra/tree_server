@@ -10,14 +10,16 @@ public class NetworkTree{
 
     private TcpListener _listener;
 
-    private List<TcpConnection> _connections;
-    private List<NetworkCommand> _commands;
+    private List<NetworkDevice> _enabledConnections;
+    private List<TcpConnection> _disabledConnections;
+    private List<TcpConnection> _userConnections;
 
     public NetworkTree() {
-        _connections = new List<TcpConnection>();
-        _commands = new List<NetworkCommand>();
+        _enabledConnections = new List<NetworkDevice>();
+        _disabledConnections = new List<TcpConnection>();
+        _userConnections = new List<TcpConnection>();
 
-        _listener = new TcpListener("192.168.1.3", 11000);
+        _listener = new TcpListener("127.0.0.1", 11000);
         _listener.listen(_onConnection);
     }
 
@@ -27,31 +29,24 @@ public class NetworkTree{
             string[] formatData = _data.Split(';');
             Console.WriteLine(string.Format("[SERVER] ({1})recieved data: {0}", _data, formatData.Length));
             if (formatData[0] == "AUTHDEV") {
-                if (formatData[1] == AUTH_KEY) {
+                if (formatData[1] == AUTH_KEY) { // auth key correct ?? init device
                     connection.send("INIT");
+                    _enabledConnections.Add(new NetworkDevice(connection, formatData[2], formatData[3]));
+                    _disabledConnections.Remove(connection);
+                } else {
+                    Console.WriteLine(string.Format("[SERVER] device connection got stoped, auth_key : {0}", formatData[1]));
                 }
-            } else if (formatData[0] == "REGCOM") {
-                string name = formatData[1];
-
-                // TODO params sepirate whit [,]
-                //commandParam[] param = new commandParam[formatData.Length - 2];
-                //for (int i = 2; i < param.Length; i++)
-                //{
-                //    param[i - 2] = (commandParam)int.Parse(formatData[i]);
-                //}
-                //_commands.Add(new NetworkCommand(name, param));
-
-                string c = "COM;";
-                c += name;
-                c += ";ewa zemmer!!";
-
-                connection.send(c);
+            } else if (formatData[0] == "USERJOIN") {
+                _userConnections.Add(connection);
+                _disabledConnections.Remove(connection);
+                Console.WriteLine(string.Format("[SERVER] new user connection", formatData[1]));
+                connection.send("INIT");
             }
         };
         connection.OnConnectionClosed += () => {
             Console.WriteLine("[SERVER] connection--");
         };
-        _connections.Add(connection);
+        _disabledConnections.Add(connection);
     }
 }
 

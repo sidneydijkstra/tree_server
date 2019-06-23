@@ -11,19 +11,26 @@ public class NetworkDevice{
 
     private TcpConnection _connection;
 
+    private List<NetworkCommand> _regcom;
+    private List<NetworkCommand> _regret;
+
     public NetworkDevice(TcpConnection _connection, string _id, string _description) {
         this._connection = _connection;
         this.id = _id;
         this.description = _description;
 
         this._connection.OnRecieveTcpPackage = null;
+        this.setupPackageHandeling();
     }
 
     private void setupPackageHandeling() {
         _connection.OnRecieveTcpPackage += (string _data) => {
             string[] formatData = _data.Split(';');
-            if (formatData[0] == "AUTHDEV") {
-                
+            Console.WriteLine(string.Format("[SERVER] ({1})recieved data: {0}", _data, formatData.Length));
+            if (formatData[0] == "REGCOM") {
+                _regcom.Add(new NetworkCommand(formatData));
+            }else if (formatData[0] == "REGRET"){
+                _regret.Add(new NetworkCommand(formatData));
             }
         };
     }
