@@ -4,23 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum commandParam{
-    INT = 0, FLOAT = 1, BOOL = 2, STRING = 3
+public enum CommandParams{
+    INT    = 0,
+    FLOAT  = 1,
+    BOOL   = 2,
+    STRING = 3
 }
 
 public class NetworkCommand{
 
     public string name;
-    public commandParam[] param;
+    public CommandParams[] param;
 
     public NetworkCommand(string[] _formatData) {
 
         // TODO params sepirate whit [,]
         name = _formatData[1];
         string[] formatParams = _formatData[2].Split(',');
-        param = new commandParam[formatParams.Length];
+        param = new CommandParams[formatParams.Length];
         for (int i = 0; i < formatParams.Length; i++){
-            param[i - 2] = (commandParam)int.Parse(formatParams[i]);
+            param[i - 2] = (CommandParams)int.Parse(formatParams[i]);
         }
     }
 

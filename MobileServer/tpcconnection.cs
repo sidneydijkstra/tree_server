@@ -10,12 +10,15 @@ using System.Threading;
 public class TcpConnection{
     private Thread _listenThread;
 
+    public int networkId;
+
     public Action<string> OnRecieveTcpPackage;
     public Action OnConnectionClosed;
 
     private Socket _socket;
 
-    public TcpConnection(Socket _socket) {
+    public TcpConnection(int _networkId, Socket _socket) {
+        this.networkId = _networkId;
         this._socket = _socket;
 
         _listenThread = new Thread(new ThreadStart(_listen));

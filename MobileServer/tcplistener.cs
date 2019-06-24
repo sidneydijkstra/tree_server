@@ -44,7 +44,6 @@ public class TcpListener{
             while (true){
                 Socket handler = _listener.Accept();
                 onConnection?.Invoke(handler);
-                Console.WriteLine(string.Format("[SERVER] connection++"));
                 continue;
 
                 int bytesRec = handler.Receive(bytes);

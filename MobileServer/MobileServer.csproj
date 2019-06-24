@@ -46,6 +46,7 @@
     <Compile Include="networkcommand.cs" />
     <Compile Include="networkdevice.cs" />
     <Compile Include="networktree.cs" />
+    <Compile Include="networkuser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tcplistener.cs" />

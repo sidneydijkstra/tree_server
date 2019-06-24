@@ -11,13 +11,16 @@ public class NetworkDevice{
 
     private TcpConnection _connection;
 
-    private List<NetworkCommand> _regcom;
-    private List<NetworkCommand> _regret;
+    public List<NetworkCommand> regcom;
+    public List<NetworkCommand> regret;
 
     public NetworkDevice(TcpConnection _connection, string _id, string _description) {
         this._connection = _connection;
         this.id = _id;
         this.description = _description;
+
+        regcom = new List<NetworkCommand>();
+        regret = new List<NetworkCommand>();
 
         this._connection.OnRecieveTcpPackage = null;
         this.setupPackageHandeling();
@@ -28,9 +31,9 @@ public class NetworkDevice{
             string[] formatData = _data.Split(';');
             Console.WriteLine(string.Format("[SERVER] ({1})recieved data: {0}", _data, formatData.Length));
             if (formatData[0] == "REGCOM") {
-                _regcom.Add(new NetworkCommand(formatData));
+                regcom.Add(new NetworkCommand(formatData));
             }else if (formatData[0] == "REGRET"){
-                _regret.Add(new NetworkCommand(formatData));
+                regret.Add(new NetworkCommand(formatData));
             }
         };
     }
