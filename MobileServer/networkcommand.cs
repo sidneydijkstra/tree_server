@@ -23,22 +23,26 @@ public class NetworkCommand{
         string[] formatParams = _formatData[2].Split(',');
         param = new CommandParams[formatParams.Length];
         for (int i = 0; i < formatParams.Length; i++){
-            param[i - 2] = (CommandParams)int.Parse(formatParams[i]);
+            param[i] = (CommandParams)int.Parse(formatParams[i]);
         }
     }
 
     public string formatRegCom() {
-        string c = "REGCOM;" + name;
+        string c = "REGCOM;" + name + ";";
         for (int i = 0; i < param.Length; i++){
-            c += ";" + ((int)param[i]).ToString();
+            c += ((int)param[i]).ToString();
+            if (i < param.Length - 1)
+                c += ",";
         }
         return c; 
     }
 
     public string formatCom(params object[] values) {
-        string c = "COM;" + name;
+        string c = "COM;" + name + ";";
         for (int i = 0; i < param.Length; i++){
-            c += ";" + values[i].ToString();
+            c += values[i].ToString();
+            if (i < param.Length - 1)
+                c += ",";
         }
         return c; 
     }

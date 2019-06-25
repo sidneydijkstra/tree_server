@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 public class NetworkUser{
@@ -13,14 +14,25 @@ public class NetworkUser{
         this._connection.OnRecieveTcpPackage = null;
         this.setupPackageHandeling();
     }
+    
 
     public void updateDevice(NetworkDevice _device) {
+        Thread th = new Thread(new ParameterizedThreadStart(_updateDevice));
+        th.Start(_device);
+    }
+    private void _updateDevice(object b) {
+        NetworkDevice _device = (NetworkDevice)b;
         _connection.send("REGDEV;" + _device.id + ";" + _device.description);
-        foreach(NetworkCommand comm in _device.regcom){
-            _connection.send(comm.formatRegCom());
+        Thread.Sleep(500);
+        foreach (NetworkCommand comm in _device.regcom)
+        {
+            Thread.Sleep(500);
+            _connection.send("DEVUPD;" + _device.id + ";" + comm.formatRegCom());
         }
-        foreach(NetworkCommand comm in _device.regret){
-            _connection.send(comm.formatRegRet());
+        foreach (NetworkCommand comm in _device.regret)
+        {
+            Thread.Sleep(500);
+            _connection.send("DEVUPD;" + _device.id + ";" + comm.formatRegRet());
         }
     }
 

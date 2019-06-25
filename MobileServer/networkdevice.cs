@@ -29,7 +29,6 @@ public class NetworkDevice{
     private void setupPackageHandeling() {
         _connection.OnRecieveTcpPackage += (string _data) => {
             string[] formatData = _data.Split(';');
-            Console.WriteLine(string.Format("[SERVER] ({1})recieved data: {0}", _data, formatData.Length));
             if (formatData[0] == "REGCOM") {
                 regcom.Add(new NetworkCommand(formatData));
             }else if (formatData[0] == "REGRET"){
