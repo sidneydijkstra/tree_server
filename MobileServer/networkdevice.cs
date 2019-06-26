@@ -31,10 +31,20 @@ public class NetworkDevice{
             string[] formatData = _data.Split(';');
             if (formatData[0] == "REGCOM") {
                 regcom.Add(new NetworkCommand(formatData));
-            }else if (formatData[0] == "REGRET"){
+            } else if (formatData[0] == "REGRET") {
                 regret.Add(new NetworkCommand(formatData));
+            } else if (formatData[0] == "RET") {
+                _connection.send(_data);
             }
         };
+    }
+
+    public void send(string _data) { 
+        _connection.send(_data);
+    }
+
+    public void stop(){
+        _connection.stop();
     }
 }
 

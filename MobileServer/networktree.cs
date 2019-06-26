@@ -61,9 +61,19 @@ public class NetworkTree{
             Console.WriteLine(string.Format("[SERVER] USER[{0}] recieved data: {1}", _conn.networkId, _data));
 
             if (formatData[0] == "GETDEV") {
-                foreach (NetworkDevice device in _enabledConnections){
+                foreach (NetworkDevice device in _enabledConnections) {
                     user.updateDevice(device);
                 }
+            } else if (formatData[0] == "DEVSEN") {
+                string command = "";
+                for (int i = 2; i < formatData.Length; i++){
+                    command += formatData[i];
+                    if (i < formatData.Length - 1)
+                        command += ";";
+                }
+                NetworkDevice device = _enabledConnections.Find(x => x.id == formatData[1]);
+                if (device != null)
+                    device.send(command);
             }
         };
 
@@ -71,6 +81,13 @@ public class NetworkTree{
     }
 
     public void initDeviceConnection(TcpConnection _conn, string[] _formatData) {
+        NetworkDevice tempDevice = _enabledConnections.Find(x => x.id == _formatData[2]);
+        if (tempDevice != null) {
+            _enabledConnections.Remove(tempDevice);
+            tempDevice.stop();
+            tempDevice = null;
+        }
+        
         _disabledConnections.Remove(_conn);
         NetworkDevice device = new NetworkDevice(_conn, _formatData[2], _formatData[3]);
         _enabledConnections.Add(device);
@@ -84,6 +101,10 @@ public class NetworkTree{
                     user.updateDevice(device);
                 }
             }
+        };
+
+        _conn.OnConnectionClosed += () => {
+            _enabledConnections.Remove(device);
         };
 
         _conn.send("INIT");

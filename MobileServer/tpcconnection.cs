@@ -41,8 +41,10 @@ public class TcpConnection{
                     OnRecieveTcpPackage?.Invoke(data);
             }
             catch (Exception){
-                _socket.Close();
-                _socket = null;
+                if (_socket != null) {
+                    _socket.Close();
+                    _socket = null;
+                }
                 OnConnectionClosed?.Invoke();
                 break;
             }
@@ -53,7 +55,8 @@ public class TcpConnection{
 
     public void stop() {
         _listenThread.Abort();
-        _socket.Close();
+        if(_socket != null)
+            _socket.Close();
         _listenThread = null;
         _socket = null;
     }
