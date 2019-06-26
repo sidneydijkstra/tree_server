@@ -18,7 +18,7 @@ public class NetworkTree{
     public NetworkTree() {
         _enabledConnections = new List<NetworkDevice>();
         _disabledConnections = new List<TcpConnection>();
-        _userConnections = new List<NetworkUser>();
+        _userConnections = new List<NetworkUser>(); 
 
         _listener = new TcpListener("192.168.1.3", 11000);
         _listener.listen(_onConnection);
