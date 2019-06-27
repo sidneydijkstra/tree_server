@@ -19,3 +19,10 @@ D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.cspr
 D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
 D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.exe
 D:\programming\workspace\C#\tree_server\MobileServer\obj\Debug\MobileServer.pdb
+D:\Projects\tree_server\MobileServer\bin\Debug\MobileServer.exe.config
+D:\Projects\tree_server\MobileServer\bin\Debug\MobileServer.exe
+D:\Projects\tree_server\MobileServer\bin\Debug\MobileServer.pdb
+D:\Projects\tree_server\MobileServer\obj\Debug\MobileServer.csprojAssemblyReference.cache
+D:\Projects\tree_server\MobileServer\obj\Debug\MobileServer.csproj.CoreCompileInputs.cache
+D:\Projects\tree_server\MobileServer\obj\Debug\MobileServer.exe
+D:\Projects\tree_server\MobileServer\obj\Debug\MobileServer.pdb

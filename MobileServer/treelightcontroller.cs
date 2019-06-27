@@ -16,7 +16,7 @@ class TreeReader
     public TreeReader()
     {
         partyMode = false;
-        using (FileStream s = new FileStream("./comport.txt", FileMode.OpenOrCreate))
+        using (FileStream s = new FileStream("comport.txt", FileMode.OpenOrCreate))
         {
             if (s.Length == 0)
             {
@@ -78,9 +78,12 @@ class SerialReader
     {
         com = comPort;
         baud = baudrate;
+        p = new SerialPort(com, baud);
         p.ReadTimeout = 100;
         p.WriteTimeout = 100;
-        p = new SerialPort(com, baud);
+
+        messagesRecieved = new Queue<string>();
+        messagesToSend = new Queue<string>();
 
         running = true;
         thread = new Thread(new ThreadStart(StartRead));
