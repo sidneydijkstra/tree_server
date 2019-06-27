@@ -17,7 +17,13 @@ public class NetworkTree{
 
     public NetworkTree() {
         SettingsController.load();
-        TreeLightController.set(new RGB() { r = 255, g = 0, b = 0 }, false);
+        try{
+            TreeLightController.set(new RGB() { r = 255, g = 0, b = 0 }, false);
+        }
+        catch (Exception e){
+            Console.WriteLine("[TREE] exception: " + e.ToString());
+            throw;
+        }
 
         _enabledConnections = new List<NetworkDevice>();
         _disabledConnections = new List<TcpConnection>();

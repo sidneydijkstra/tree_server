@@ -89,38 +89,48 @@ class SerialReader
 
     private void StartRead()
     {
-        while (running)
+        try
         {
-            try
+            p.Open();
+            while (running)
             {
-                string mess = p.ReadLine();
-                messagesRecieved.Enqueue(mess);
-            }
-            catch (Exception e)
-            {
-                if (!(e is TimeoutException))
-                {
-                    Console.WriteLine(e);
-                }
-            }
-
-            bool shouldDequeu = true;
-            while (messagesToSend.Count > 0)
                 try
                 {
-                    string toSend = messagesToSend.Peek();
-                    p.WriteLine(toSend);
+                    string mess = p.ReadLine();
+                    messagesRecieved.Enqueue(mess);
                 }
                 catch (Exception e)
                 {
-                    shouldDequeu = false;
-                }
-                finally
-                {
-                    if (shouldDequeu)
-                        messagesToSend.Dequeue();
+                    if (!(e is TimeoutException))
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
+                bool shouldDequeu = true;
+                while (messagesToSend.Count > 0)
+                    try
+                    {
+                        string toSend = messagesToSend.Peek();
+                        p.WriteLine(toSend);
+                    }
+                    catch (Exception e)
+                    {
+                        shouldDequeu = false;
+                    }
+                    finally
+                    {
+                        if (shouldDequeu)
+                            messagesToSend.Dequeue();
+                    }
+
+            }
+            p.Close();
+        }
+        catch (Exception)
+        {
+
+            throw;
         }
     }
 
