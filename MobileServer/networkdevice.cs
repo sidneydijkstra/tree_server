@@ -32,7 +32,9 @@ public class NetworkDevice{
             if (formatData[0] == "REGCOM") {
                 regcom.Add(new NetworkCommand(formatData));
             } else if (formatData[0] == "REGRET") {
-                regret.Add(new NetworkCommand(formatData));
+                NetworkCommand tempComm = new NetworkCommand(formatData);
+                regret.Add(tempComm);
+                
             }
         };
     }

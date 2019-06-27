@@ -21,15 +21,40 @@ public struct Setting_RGB {
     public int r;
     public int g;
     public int b;
+
+    public void format(string _format) { // r,g,b
+        string[] formatData = _format.Split(',');
+        r = int.Parse(formatData[0]);
+        g = int.Parse(formatData[1]);
+        b = int.Parse(formatData[2]);
+    }
+
+    public string formatToString() {
+        return r + "," + g + "," + b;
+    }
 }
+
+public enum SettingDeviceCommandType {
+    SET = 0,
+    BLINK = 1
+}
+
+public struct Setting_Device_Commmand {
+    public SettingDeviceCommandType type;
+    public string deviceName;
+    public string id;
+}
+
 
 public static class SettingsController{
     private static string _filePath = Environment.CurrentDirectory;
     private static string _settingServerFilePath = Environment.CurrentDirectory + "/server_settings.set";
     private static string _settingTreeFilePath = Environment.CurrentDirectory + "/tree_settings.set";
+    private static string _settingCommandFilePath = Environment.CurrentDirectory + "/command_settings.set";
 
     public static Setting_Info info;
     public static Setting_Tree tree;
+    public static Setting_Device_Commmand[] commands;
 
     public static void load() {
         string json = "";
@@ -66,6 +91,22 @@ public static class SettingsController{
         tree = JSONParser.FromJson<Setting_Tree>(json);
         Console.WriteLine(string.Format("[JSON] info file: {0}", json));
 
+        json = "";
+        if (!File.Exists(_settingCommandFilePath)) {
+            using (FileStream file = File.Create(_settingCommandFilePath)) {
+                json = JSONWriter.ToJson(new Setting_Device_Commmand[0]);
+                Byte[] data = new UTF8Encoding(true).GetBytes(json);
+                file.Write(data, 0 , data.Length);
+            }
+        }else{
+            json = "";
+            using (StreamReader sr = File.OpenText(_settingCommandFilePath)){
+                json = sr.ReadLine();
+            }
+        }
+        commands = JSONParser.FromJson<Setting_Device_Commmand[]>(json);
+        Console.WriteLine(string.Format("[JSON] info file: {0}", json));
+
         return;
     }
 
@@ -89,6 +130,16 @@ public static class SettingsController{
             Byte[] data = new UTF8Encoding(true).GetBytes(json);
             file.Write(data, 0 , data.Length);
         }
+        
+        if (File.Exists(_settingCommandFilePath)) {
+            File.Delete(_settingCommandFilePath);
+        }
+
+        using (FileStream file = File.Create(_settingCommandFilePath)) {
+            string json = JSONWriter.ToJson(commands);
+            Byte[] data = new UTF8Encoding(true).GetBytes(json);
+            file.Write(data, 0 , data.Length);
+        }
 
         Console.WriteLine(string.Format("[JSON] saved files"));
     }
@@ -108,6 +159,14 @@ public static class SettingsController{
     public static void resyncTree(string _json) {
         Console.WriteLine(string.Format("[JSON] resync info: {0}", _json));
         tree = JSONParser.FromJson<Setting_Tree>(_json);
+        save();
+    }
+    public static string getSyncCommands() {
+        return "SYNCSET;commands;" + JSONWriter.ToJson(commands);
+    }
+    public static void resyncCommands(string _json) {
+        Console.WriteLine(string.Format("[JSON] resync info: {0}", _json));
+        commands = JSONParser.FromJson<Setting_Device_Commmand[]>(_json);
         save();
     }
 }

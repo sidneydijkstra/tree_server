@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 public class NetworkTree{
+    public static TcpConnection treeConnection;
+
     private static int NETWORK_SESSION_ID = 0;
     private static string AUTH_KEY = "AABBCCDD11223344";
 
@@ -18,12 +20,7 @@ public class NetworkTree{
 
     public NetworkTree() {
         SettingsController.load();
-        try{
-            TreeLightController.set(new RGB() { r = 255, g = 0, b = 0 }, false);
-        }
-        catch (Exception e){
-            Console.WriteLine("[TREE] exception: " + e.ToString());
-        }
+        treeConnection = null;
 
         _enabledConnections = new List<NetworkDevice>();
         _disabledConnections = new List<TcpConnection>();
@@ -41,6 +38,15 @@ public class NetworkTree{
         connection.OnRecieveTcpPackage += (string _data) => {
             string[] formatData = _data.Split(';');
             Console.WriteLine(string.Format("[SERVER] UNKNOWN[{0}] recieved data: {1}", connection.networkId, _data));
+
+            if (formatData[0] == "IAMTREE\r\n") { // --------------------=================----------------------================---------------
+                Console.WriteLine("[TREE] connected");
+                treeConnection = connection;
+                //TreeLightController.set(new Setting_RGB() { r = 255, g = 16, b = 7 }, false);
+                //TreeLightController.blink(new Setting_RGB() { r = 255, g = 16, b = 7 }, 12);
+                TreeLightController.party();
+                return;
+            }
 
             if (formatData[0] == "AUTHDEV") {
                 if (formatData[1] == AUTH_KEY) { // auth key correct ?? init device
@@ -86,6 +92,8 @@ public class NetworkTree{
                     SettingsController.resyncInfo(formatData[2]);
                 }else if (formatData[1] == "tree"){
                     SettingsController.resyncTree(formatData[2]);
+                }else if (formatData[1] == "commands"){
+                    SettingsController.resyncCommands(formatData[2]);
                 }
             }
         };
@@ -103,6 +111,8 @@ public class NetworkTree{
         conn.send(SettingsController.getSyncInfo());
         Thread.Sleep(200);
         conn.send(SettingsController.getSyncTree());
+        Thread.Sleep(200);
+        conn.send(SettingsController.getSyncCommands());
         Console.WriteLine(string.Format("[JSON] sync info settings"));
     }
 
@@ -129,6 +139,19 @@ public class NetworkTree{
             } else if (formatData[0] == "RET") {
                 foreach (NetworkUser user in _userConnections) {
                     user.send("DEVUPD;" + device.id + ";" + _data);
+                }
+                Setting_Device_Commmand[] list = SettingsController.commands;
+                if (list != null) {
+                    foreach (Setting_Device_Commmand comm in list){
+                        if (comm.deviceName == device.id && comm.id == formatData[1]) {
+                            if (comm.type == SettingDeviceCommandType.SET){
+                                TreeLightController.set(new Setting_RGB(), false);
+                            }
+                            else {
+                                TreeLightController.blink(new Setting_RGB(), 3);
+                            }
+                        }
+                    }
                 }
             }
         };
