@@ -22,8 +22,8 @@ class TreeReader
             {
                 throw (new Exception("Please add to right com port to comport.txt, example: COM4"));
             }
-            byte[] bytes = new byte[6];
-            s.Read(bytes, 0, 6);
+            byte[] bytes = new byte[s.Length];
+            s.Read(bytes, 0, (int)s.Length);
             string newString = Encoding.ASCII.GetString(bytes);
             reader = new SerialReader(newString, 9600);
         }
@@ -125,13 +125,14 @@ class SerialReader
                     }
 
             }
-            p.Close();
         }
         catch (Exception)
         {
 
             throw;
         }
+
+        p.Close();
     }
 
     public string LastMessage()
