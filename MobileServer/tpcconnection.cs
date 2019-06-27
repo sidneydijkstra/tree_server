@@ -28,7 +28,8 @@ public class TcpConnection{
     public void send(string _data) {
         Console.WriteLine(string.Format("[SERVER] send data: {0}", _data));
         byte[] msg = Encoding.ASCII.GetBytes(_data);
-        _socket.Send(msg);
+        if(_socket != null && _socket.Connected)
+            _socket.Send(msg);
     }
 
     private void _listen() {

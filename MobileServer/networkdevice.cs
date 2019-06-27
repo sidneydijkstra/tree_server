@@ -33,8 +33,6 @@ public class NetworkDevice{
                 regcom.Add(new NetworkCommand(formatData));
             } else if (formatData[0] == "REGRET") {
                 regret.Add(new NetworkCommand(formatData));
-            } else if (formatData[0] == "RET") {
-                _connection.send(_data);
             }
         };
     }

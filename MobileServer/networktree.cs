@@ -16,6 +16,8 @@ public class NetworkTree{
     private List<NetworkUser> _userConnections;
 
     public NetworkTree() {
+        SettingsController.load();
+
         _enabledConnections = new List<NetworkDevice>();
         _disabledConnections = new List<TcpConnection>();
         _userConnections = new List<NetworkUser>(); 
@@ -61,12 +63,10 @@ public class NetworkTree{
             Console.WriteLine(string.Format("[SERVER] USER[{0}] recieved data: {1}", _conn.networkId, _data));
 
             if (formatData[0] == "GETDEV") {
-                foreach (NetworkDevice device in _enabledConnections) {
-                    user.updateDevice(device);
-                }
+                user.updateDevices(_enabledConnections.ToArray());
             } else if (formatData[0] == "DEVSEN") {
                 string command = "";
-                for (int i = 2; i < formatData.Length; i++){
+                for (int i = 2; i < formatData.Length; i++) {
                     command += formatData[i];
                     if (i < formatData.Length - 1)
                         command += ";";
@@ -74,10 +74,19 @@ public class NetworkTree{
                 NetworkDevice device = _enabledConnections.Find(x => x.id == formatData[1]);
                 if (device != null)
                     device.send(command);
+            } else if (formatData[0] == "RESYNCSET") {
+                if (formatData[1] == "info") {
+                    SettingsController.resyncInfo(formatData[2]);
+                }
             }
         };
 
-        _conn.send("INIT");
+        _conn.OnConnectionClosed += ()=>{
+            _userConnections.Remove(user);
+        };
+
+        _conn.send(SettingsController.getSyncInfo());
+        Console.WriteLine(string.Format("[JSON] sync info settings"));
     }
 
     public void initDeviceConnection(TcpConnection _conn, string[] _formatData) {
@@ -99,6 +108,10 @@ public class NetworkTree{
             if (formatData[0] == "COMPLETE") {
                 foreach (NetworkUser user in _userConnections) {
                     user.updateDevice(device);
+                }
+            } else if (formatData[0] == "RET") {
+                foreach (NetworkUser user in _userConnections) {
+                    user.send("DEVUPD;" + device.id + ";" + _data);
                 }
             }
         };
