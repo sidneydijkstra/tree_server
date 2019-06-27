@@ -22,7 +22,6 @@ public class NetworkTree{
         }
         catch (Exception e){
             Console.WriteLine("[TREE] exception: " + e.ToString());
-            throw;
         }
 
         _enabledConnections = new List<NetworkDevice>();
