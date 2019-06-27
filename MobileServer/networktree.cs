@@ -17,6 +17,7 @@ public class NetworkTree{
 
     public NetworkTree() {
         SettingsController.load();
+        TreeLightController.set(new RGB() { r = 255, g = 0, b = 0 }, false);
 
         _enabledConnections = new List<NetworkDevice>();
         _disabledConnections = new List<TcpConnection>();
