@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 public class NetworkTree{
@@ -83,6 +84,8 @@ public class NetworkTree{
             } else if (formatData[0] == "RESYNCSET") {
                 if (formatData[1] == "info") {
                     SettingsController.resyncInfo(formatData[2]);
+                }else if (formatData[1] == "tree"){
+                    SettingsController.resyncTree(formatData[2]);
                 }
             }
         };
@@ -91,7 +94,15 @@ public class NetworkTree{
             _userConnections.Remove(user);
         };
 
-        _conn.send(SettingsController.getSyncInfo());
+        Thread th = new Thread(new ParameterizedThreadStart(_syncSettings));
+        th.Start(_conn);
+    }
+
+    private void _syncSettings(object _object) {
+        TcpConnection conn = (TcpConnection)_object;
+        conn.send(SettingsController.getSyncInfo());
+        Thread.Sleep(200);
+        conn.send(SettingsController.getSyncTree());
         Console.WriteLine(string.Format("[JSON] sync info settings"));
     }
 
